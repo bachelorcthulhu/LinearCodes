@@ -1,7 +1,11 @@
 ﻿using LinearCodes;
 
+
+Code testCode = new Code(3);
+testCode.GetCodeInfo();
+
 int rows = 3; //3
-int columns = 7; //7
+int columns = 6; //7
 
 Matrix matrixH = new Matrix(rows, columns);
 matrixH.MakeSimpleHMatrix();
@@ -16,8 +20,8 @@ for (int i = 0; i < rows; i++)
 }
 Console.WriteLine();
 
-rows = 4; //4
-columns = 7; //7
+rows = 3; //4
+columns = 6; //7
 
 Matrix matrixG = new Matrix(rows, columns);
 matrixG.MakeSimpleGMatrix(matrixH);
