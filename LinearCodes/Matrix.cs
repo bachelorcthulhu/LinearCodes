@@ -11,11 +11,11 @@ namespace LinearCodes
     public class Matrix
     {
         /// <summary>
-        /// N - количество строк в матрице
+        /// Количество строк в матрице
         /// </summary>
         public int Rows { get; private set; }
         /// <summary>
-        /// K - количество столбцов в матрице
+        /// Количество столбцов в матрице
         /// </summary>
         public int Columns { get; private set; }
         /// <summary>
@@ -151,29 +151,37 @@ namespace LinearCodes
 
             // Сначала заполняем часть, которая является единичной матрицой
             // Эта часть находится в конце, соответственно заполнение начинается с конца
-            // "Columns - 1" - последний столбец, и так структура кода (n,k), то зака
-            for (int i = Columns - 1; i >= Rows; i--)
+            // "Columns - 1" - последний столбец, заполняем с конца степенями двойки, всего таких столбов столько же, как и строчек
+            for (int i = Columns - 1; i >= Columns - Rows; i--)
             {
+                
+                //Получаем двоичную запись числа
                 binaryNumber = ConvertToBinary((int)Math.Pow(2, powerOfTwo), Rows);
+
+                //Заполняем колонку двоичным числом
                 for (int j = 0; j < Rows; j++)
                 {
                     Data[j, i] = binaryNumber[j];
                 }
 
+                //Увеличиваем степень двойки
                 powerOfTwo++;
             }
 
 
             for (int i = 0; i < Columns - Rows; i++)
             {
+                //Получаем двоичную запись числа
                 binaryNumber = ConvertToBinary(number, Rows);
 
+                //Заполняем колонку двоичным числом
                 for (int j = 0; j < Rows; j++)
                 {
                     Data[j, i] = binaryNumber[j];
                 }
 
                 number++;
+                //Если число является степнью двойки, то пропускаем, так как уже записано
                 if (IsPowerOfTwo(number))
                 {
                     number++;
@@ -185,6 +193,45 @@ namespace LinearCodes
     public class MatrixG : Matrix
     {
         public MatrixG(int _rows, int _columns) : base(_rows, _columns) { }
+
+        public void MakeSimpleMatrix(Matrix _hMatrix)
+        {
+            int powerOfTwo = 0; // Степень для двойки; степень 0 => 2^0 => 1
+
+            string binaryNumber; // Переменная для записи числа в бинарном виде
+
+            int hMatrixRow = 0; // Переменная для подсчета строк в H матрице
+
+            int columnToStart = Columns - _hMatrix.Rows; // с какой колонки начинать заполнять данными с H матрицы
+
+            // Начинаем заполнять матрицу степенями двойки с начала
+            for (int i = 0; i < columnToStart; i++)  
+            {
+
+                //Получаем двоичную запись числа
+                binaryNumber = ConvertToBinary((int)Math.Pow(2, powerOfTwo), Rows);
+
+                //Заполняем столбец начиная с первой строчки
+                for (int j = 0; j < Rows; j++) 
+                {
+                    Data[j, i] = binaryNumber[Rows - 1 - j]; //
+                }
+
+                //Увеличиваем степень двойки
+                powerOfTwo++;
+            }
+
+            //Заполняем колонки данными с H матрицы
+            for (int i = columnToStart; i < Columns; i++) 
+            {
+                //Заполняем столбец начиная с первой строчки
+                for (int j = 0; j < Rows; j++)
+                {
+                    Data[j, i] = _hMatrix.Data[hMatrixRow, j];
+                }
+                hMatrixRow++; //так как транспонируем, используем значения row, строчек матрницы. Увеличиваем её на один после прохода
+            }
+        }
 
     }
 }

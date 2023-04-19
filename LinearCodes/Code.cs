@@ -85,14 +85,42 @@ namespace LinearCodes
         /// A.K.A n - k: Длина избыточной контрольной части 
         /// </summary>
         public int RedundantCheckingPartOfCodeSize { get; private set; }
+        /// <summary>
+        /// 2 ^ (k) - 1
+        /// </summary>
+        public int MatrixSize { get; private set; }
+        /// <summary>
+        /// Количество строк в обычной H матрице
+        /// </summary>
+        public int SimpleHMatrixRows { get; private set; }
+        /// <summary>
+        /// Количество колонок в обычной H матрице
+        /// </summary>
+        public int SimpleHMatrixColumns { get; private set; }
+        /// <summary>
+        /// Количество строк в обычной G матрице
+        /// </summary>
+        public int SimpleGMatrixRows { get; private set; }
+        /// <summary>
+        /// Количество колонок в обычной G матрице
+        /// </summary>
+        public int SimpleGMatrixColumns { get; private set; }
 
 
         public Code(int _messageSize) 
         {
             MessageSize = _messageSize;
-            MessagePartOfCodeSize = Equations.GetMessagePartOfCodeSize(MessageSize);
+            MessagePartOfCodeSize = Equations.GetMessagePartOfCodeSize(MessageSize);            
             CodeSize = Equations.GetCodeSizeEquation(MessagePartOfCodeSize);
             RedundantCheckingPartOfCodeSize = CodeSize - MessagePartOfCodeSize;
+
+            MatrixSize = (int)Math.Pow(2, MessagePartOfCodeSize) - 1;
+
+            SimpleHMatrixRows = MessagePartOfCodeSize;
+            SimpleHMatrixColumns = MatrixSize;
+
+            SimpleGMatrixRows = MatrixSize - MessagePartOfCodeSize;
+            SimpleGMatrixColumns = MatrixSize;
         }
 
         public void GetCodeInfo()
